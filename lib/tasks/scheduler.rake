@@ -48,7 +48,7 @@ namespace :scheduler do
 		hibernation_notification_template = 
 				"The following servers are scheduled to go down for hibernation:<p>" + 
 				server.hostname + "@ #{time.hour}:#{time.min} " + 
-				"<p><p>To cancel any of these hibernation, go to <a href='http://snoopy.escm.co:3000/servers'>http://snoopy.escm.co</a> " + 
+				"<p><p>To cancel any of these hibernation, go to <a href='http://snoopy.escm.co:3000/servers/'>http://snoopy.escm.co</a> " + 
 				"<p><p>To wake up instances already hibernating, go to TBD<SOMETHING APPROPRIATE HERE> " + 
 				"<p><p>Thanks,<p>EngOps Bot"
 		ses_resp = @ses.send_email(
@@ -121,12 +121,17 @@ namespace :scheduler do
 	servers = Server.all
 	update_instances_state(servers)
 	servers.each do |server|
-		if server.locked
+		if server.state == "pending"
+			next
+		elsif server.locked
 			puts "#{server.hostname} LOCKED"
 		elsif in_uptime_range? server
-			puts "#{server.hostname} should be running"
+			if server.state != "running" or server.state != "pending"
+				puts server.start_instance
+				# puts "#{server.hostname} should be running. STATUS - #{server.state}"	
+			end
+			
 		else
-
 			unless server.state == "stopping" or server.state == "stopped" or server.state == "terminated"
 				puts "#{Time.now}: prepare_to_stop"
 				prepare_to_stop server
