@@ -1,5 +1,5 @@
 every 5.minute do
-  rake "scheduler:check", :output => 'cron.log'
+  rake "scheduler:check", :output => '~/ec2_scheduler.log'
 end
 
 # Use this file to easily define all of your cron jobs.
