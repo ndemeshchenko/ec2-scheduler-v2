@@ -88,7 +88,7 @@ namespace :scheduler do
 				instance_ids: [server.instance_id]
 			)
 
-			server = Server.where(instance_id: server.instanceId).first
+			server = Server.where(instance_id: server.instance_id).first
 			server.state = resp.first.stopping_instances[0].current_state.name
 			server.save
 		end
