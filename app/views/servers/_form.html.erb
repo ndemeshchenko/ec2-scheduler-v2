@@ -1,0 +1,45 @@
+<%= form_for(@server) do |f| %>
+  <% if @server.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@server.errors.count, "error") %> prohibited this server from being saved:</h2>
+
+      <ul>
+      <% @server.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :instance_id %><br>
+    <%= f.text_field :instance_id %>
+  </div>
+  <div class="field">
+    <%= f.label :hostname %><br>
+    <%= f.text_field :hostname %>
+  </div>
+  <div class="field">
+    <%= f.label :url %><br>
+    <%= f.text_field :url %>
+  </div>
+  <div class="field">
+    <%= f.label :state %><br>
+    <%= f.text_field :state %>
+  </div>
+  <div class="field">
+    <%= f.label :schedule_days %><br>
+    <%= f.text_field :schedule_days %>
+  </div>
+  <div class="field">
+    <%= f.label :schedule_hours %><br>
+    <%= f.text_field :schedule_hours %>
+  </div>
+  <div class="field">
+    <%= f.label :locked %><br>
+    <%= f.check_box :locked %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

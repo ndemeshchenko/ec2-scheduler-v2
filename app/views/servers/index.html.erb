@@ -1,0 +1,60 @@
+<div class="container">
+  <div class="row">
+  <div class="col-md-4">
+    <h3>Listing servers</h3>
+    <ul class="nav nav-pills nav-stacked">
+      <% @servers.each do |server| %>
+        <li role="presentation" class="">
+          <%= link_to server do %>
+            <span class="glyphicon glyphicon-th"></span>
+            <%= server.hostname %><span class="label label-info"><%= server.state %></span>
+          <% end %>
+          <%#= link_to 'Show', server %>
+        <%#= link_to 'Edit', edit_server_path(server) %>
+        <%#= link_to 'Destroy', server, method: :delete, data: { confirm: 'Are you sure?' } %>
+         
+            
+          </a>
+        </li>
+      <% end %>  
+    </ul>
+    
+    
+  </div>
+  <div class="col-md-8">
+    
+  </div>
+  </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-8">
+      <div class="latest-events">
+      <div class="panel panel-info">
+        <div class="panel-heading">Latest events</div>
+        <% if @events and @events.size %>
+          <% events.each do |event| %>   
+            <div>
+              <span class="">"hostname": <%= event.hostname %></span>  
+              <p>
+              <span class="">"eventName": <%= event.eventName %></span>  
+              <p>
+              <span class="">"state": <%= event.state %></span>
+              <p>
+              <span class="">"completed" <%= event.completed %></span>
+              <p>
+              <span class="">"timestamp" <%= event.date %></span>
+              <hr>
+
+
+            </div>
+          <% end %> 
+        <% end %>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+<%= link_to 'New Server', new_server_path %>

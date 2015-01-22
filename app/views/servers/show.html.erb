@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Instance:</strong>
+  <%= @server.instance_id %>
+</p>
+
+<p>
+  <strong>Hostname:</strong>
+  <%= @server.hostname %>
+</p>
+
+<p>
+  <strong>Url:</strong>
+  <%= @server.url %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @server.state %>
+</p>
+
+<p>
+  <strong>Schedule days:</strong>
+  <%= @server.schedule_days %>
+</p>
+
+<p>
+  <strong>Schedule hours:</strong>
+  <%= @server.schedule_hours %>
+</p>
+
+<p>
+  <strong>Locked:</strong>
+  <%= @server.locked %>
+</p>
+
+<%= link_to 'Edit', edit_server_path(@server) %> |
+<%= link_to 'Back', servers_path %>
