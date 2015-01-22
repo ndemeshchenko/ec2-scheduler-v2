@@ -3,26 +3,17 @@
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
-Things you may want to cover:
+EC2 Scheduler created to managed auto stop/start of the ec2 instances to reduce costs while no one use servers.
 
-* Ruby version
+App requires mongodb to store event logs and server statistics.
 
-* System dependencies
+After u did pull from the repo, make sure mongo is up and running and run
+`bundle` in the app directory
 
-* Configuration
+then init whenever jobs with 
 
-* Database creation
+`whenever --update-crontab`
 
-* Database initialization
+and start app `rails s`
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+Enjoy!
