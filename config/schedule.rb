@@ -22,3 +22,6 @@ end
 # end
 
 # Learn more: http://github.com/javan/whenever
+
+# Begin Whenever generated tasks for: /Users/neveragny/projects/ec2_v2/config/schedule.rb
+/bin/bash -l -c 'cd /opt/opt/ec2-scheduler-v2 && RAILS_ENV=development bundle exec rake scheduler:check >> ~/ec2_scheduler.log 2>&1'

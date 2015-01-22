@@ -1,5 +1,6 @@
 class ServersController < ApplicationController
   before_action :set_server, only: [:show, :edit, :update, :destroy]
+  before_action :load_events, only: [:index]
 
   respond_to :html
 
@@ -43,5 +44,9 @@ class ServersController < ApplicationController
 
     def server_params
       params.require(:server).permit(:instance_id, :hostname, :url, :state, :schedule_days, :schedule_hours, :locked)
+    end
+
+    def load_events
+      @events = EventLog.all
     end
 end

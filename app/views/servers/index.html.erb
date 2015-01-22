@@ -34,7 +34,7 @@
       <div class="panel panel-info">
         <div class="panel-heading">Latest events</div>
         <% if @events and @events.size %>
-          <% events.each do |event| %>   
+          <% @events.each do |event| %>   
             <div>
               <span class="">"hostname": <%= event.hostname %></span>  
               <p>
