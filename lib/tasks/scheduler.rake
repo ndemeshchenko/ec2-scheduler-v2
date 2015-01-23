@@ -99,7 +99,6 @@ namespace :scheduler do
 
 	def prepare_to_stop(server)
 		events = EventLog.where(hostname: server.hostname, state: "notification", completed: false)
-		# binding.pry
 		log_date = events[0].date.in_time_zone("Pacific Time (US & Canada)") if events[0]
 		log_date_plus_hour = log_date + server.notification_interval.to_i.minutes if events[0] # add 1 minute
 		if events.size > 0
