@@ -72,7 +72,7 @@ namespace :scheduler do
 		      },
 		    },
 		  },
-		  reply_to_addresses: notification_list.split
+		  reply_to_addresses: server.notification_list.split
 		)
 		puts "message send to #{owner} :: #{ses_resp['message_id']} "
 	end
