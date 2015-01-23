@@ -131,9 +131,16 @@ namespace :scheduler do
 			puts "#{server.hostname} LOCKED"
 		elsif in_uptime_range? server
 			if server.state != "running" or server.state != "pending"
-				puts "#{server.hostname} should be running"
-				puts server.start_instance
-				# puts "#{server.hostname} should be running. STATUS - #{server.state}"	
+				if server.start_instance
+					i_start_event = EventLog.new(
+						eventName: "starting instance", 
+						state: 'start_instance',
+  						hostname: server.hostname,
+  						completed: true,
+  						date: Time.now.in_time_zone("Pacific Time (US & Canada)")
+  					)
+  					i_start_event.save
+				end	
 			end
 			
 		else
