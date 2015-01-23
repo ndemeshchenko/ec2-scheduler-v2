@@ -47,6 +47,6 @@ class ServersController < ApplicationController
     end
 
     def load_events
-      @events = EventLog.all
+      @events = EventLog.desc(:date)
     end
 end

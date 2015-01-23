@@ -39,10 +39,12 @@
       <div class="latest-events">
       <div class="panel panel-info">
         <div class="panel-heading">Latest events</div>
+        <div class="panel-body panel-height" style="max-height: 300px;overflow-y: scroll;background-color:black;color: #16DF16">
         <% if @events and @events.size %>
+
           <% @events.each do |event| %>   
-            <div>
-              <span class="">"hostname": <%= event.hostname %></span>  
+          <span><%= event.to_json %></span>    
+          <!--     <span class="">"hostname": <%= event.hostname %></span>  
               <p>
               <span class="">"eventName": <%= event.eventName %></span>  
               <p>
@@ -52,11 +54,12 @@
               <p>
               <span class="">"timestamp" <%= event.date %></span>
               <hr>
+ -->
 
 
-            </div>
           <% end %> 
         <% end %>
+        </div>
       </div>
       </div>
     </div>
