@@ -57,7 +57,7 @@ namespace :scheduler do
 		ses_resp = @ses.send_email(
 		  source: "ec2-scheduler@elementum.com",
 		  destination: {
-		    to_addresses: ["nikita@elementum.com"],
+		    to_addresses: server.notification_list.split,
 		    # cc_addresses: ["techops@elementum.com"],
 		  },
 		  message: {
