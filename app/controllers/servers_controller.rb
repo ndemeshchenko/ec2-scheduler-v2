@@ -10,7 +10,11 @@ class ServersController < ApplicationController
   end
 
   def show
-    respond_with(@server)
+    respond_to do |format|
+      format.html
+      format.js# { render partial: "instance_info.html.erb", layout: false, object: @server }
+    end
+    
   end
 
   def new

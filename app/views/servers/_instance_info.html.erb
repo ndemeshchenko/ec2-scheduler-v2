@@ -1,0 +1,43 @@
+<div style="background-color:;">
+	
+	<p id="notice"><%= notice %></p>
+
+	<p>
+  	<strong>Instance:</strong>
+  	<%= instance_info.instance_id %>
+	</p>
+
+<p>
+  <strong>Hostname:</strong>
+  <%= instance_info.hostname %>
+</p>
+
+<p>
+  <strong>Url:</strong>
+  <%= instance_info.url %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= instance_info.state %>
+</p>
+
+<p>
+  <strong>Schedule days:</strong>
+  <%= instance_info.schedule_days %>
+</p>
+
+<p>
+  <strong>Schedule hours:</strong>
+  <%= instance_info.schedule_hours %>
+</p>
+
+<p>
+  <strong>Locked:</strong>
+  <%= instance_info.locked %>
+</p>
+
+
+<%= link_to 'Edit', edit_server_path(instance_info), class: 'btn btn-default' %>
+
+</div>
