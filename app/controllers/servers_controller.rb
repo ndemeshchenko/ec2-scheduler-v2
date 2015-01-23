@@ -7,7 +7,7 @@ class ServersController < ApplicationController
   respond_to :html
 
   def index
-    @servers = Server.all
+    @servers = Server.asc(:hostname)
     respond_with(@servers)
   end
 
