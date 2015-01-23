@@ -49,7 +49,7 @@ class ServersController < ApplicationController
     end
 
     def server_params
-      params.require(:server).permit(:instance_id, :hostname, :url, :state, :schedule_days, :schedule_hours, :notification_list, :locked)
+      params.require(:server).permit(:instance_id, :hostname, :url, :state, :schedule_days, :schedule_hours, :notification_list, :notification_interval, :locked)
     end
 
     def load_events

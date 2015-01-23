@@ -101,14 +101,14 @@ namespace :scheduler do
 		events = EventLog.where(hostname: server.hostname, state: "notification", completed: false)
 		# binding.pry
 		log_date = events[0].date.in_time_zone("Pacific Time (US & Canada)") if events[0]
-		log_date_plus_hour = log_date + 60 if events[0] # add 1 minute
+		log_date_plus_hour = log_date + server.notification_interval.to_i if events[0] # add 1 minute
 		if events.size > 0
 			if (log_date_plus_hour < Time.now.in_time_zone("Pacific Time (US & Canada)"))
 				stop_instance server;
 			end
 		else
-			send_email(server, "server.owner", Time.now + 60)
-			puts("instance "+ server.hostname + " scheduled to stop at: #{Time.now + 60}");
+			send_email(server, "server.owner", Time.now + server.notification_interval.to_i)
+			puts("instance "+ server.hostname + " scheduled to stop at: #{Time.now + server.notification_interval.to_i}");
 			new_event = EventLog.new(
 				eventName: 'email sent to server owner', 
 				state: 'notification',

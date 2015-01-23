@@ -9,6 +9,7 @@ class Server
   field :schedule_days, type: String
   field :schedule_hours, type: String
   field :notification_list, type: String
+  field :notification_interval, type: String
   field :locked, type: Mongoid::Boolean
 
   def start_instance
