@@ -52,7 +52,7 @@ namespace :scheduler do
 				"The following servers are scheduled to go down for hibernation:<p>" + 
 				server.hostname + "@ #{time.hour}:#{time.min} " + 
 				"<p><p>To cancel any of these hibernation, go to <a href='http://snoopy.escm.co:3000/servers/'>http://snoopy.escm.co</a> " + 
-				"<p><p>To wake up instances already hibernating, go to TBD<SOMETHING APPROPRIATE HERE> " + 
+				# "<p><p>To wake up instances already hibernating, go to TBD<SOMETHING APPROPRIATE HERE> " + 
 				"<p><p>Thanks,<p>EngOps Bot"
 		ses_resp = @ses.send_email(
 		  source: "ec2-scheduler@elementum.com",
@@ -72,7 +72,7 @@ namespace :scheduler do
 		      },
 		    },
 		  },
-		  reply_to_addresses: ["techops@elementum.com"]
+		  reply_to_addresses: notification_list.split
 		)
 		puts "message send to #{owner} :: #{ses_resp['message_id']} "
 	end
