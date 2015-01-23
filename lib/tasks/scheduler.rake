@@ -41,6 +41,7 @@ namespace :scheduler do
 			i = Server.where(instance_id: instance['instance_id']).first
 			i.state = instance['state']['name']
 			i.save
+			puts(Time.now.in_time_zone("Pacific Time (US & Canada)") + "#{i.hostname} :: #{i.state}")
 		end
 	end
 
