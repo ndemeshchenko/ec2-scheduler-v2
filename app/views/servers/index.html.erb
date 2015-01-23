@@ -43,7 +43,7 @@
         <% if @events and @events.size %>
 
           <% @events.each do |event| %>   
-          <span><%= event.to_json %></span> 
+          <span><%= "#{event.date.in_time_zone("Pacific Time (US & Canada)")} for #{event.hostname}: #{event.state} - #{event.eventName}. completed: #{event.completed} " %></span> 
           <hr/>
           <!--     <span class="">"hostname": <%= event.hostname %></span>  
               <p>
