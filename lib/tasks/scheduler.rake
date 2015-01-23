@@ -130,7 +130,7 @@ namespace :scheduler do
 			puts "#{server.hostname} LOCKED"
 			next
 		elsif in_uptime_range? server
-			if server.state != "running" or server.state != "pending"
+			if server.state != "running" and server.state != "pending"
 				puts server.state
 				if server.start_instance
 					i_start_event = EventLog.new(
