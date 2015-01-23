@@ -2,6 +2,8 @@ class ServersController < ApplicationController
   before_action :set_server, only: [:show, :edit, :update, :destroy]
   before_action :load_events, only: [:index]
 
+  before_action :authenticate_user!
+
   respond_to :html
 
   def index
