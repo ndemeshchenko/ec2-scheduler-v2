@@ -7,8 +7,29 @@
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <ul class="nav navbar-nav navbar-right">
-        <li><a href="#/signin"><span class="glyphicon glyphicon-log-in"></span> Sign In</a></li>
+
+    <% unless current_user %>
+      
+      <ul class="nav navbar-nav navbar-right">
+        <li><%= link_to new_user_session_path do %>
+            <span class="glyphicon glyphicon-log-in"></span> Sign In
+         <% end %>
+         </li>
       </ul>
+
+    <% else %>
+
+      <ul class="nav navbar-nav navbar-right">
+         <li><%= link_to current_user.username, "#" %></li>
+         <li><%= link_to destroy_user_session_path, :method => :delete do %>
+            <span class="glyphicon glyphicon-log-out"></span> Exit
+         <% end %>
+         </li>
+      </ul>
+
+    <% end %>
+
+
   </div><!-- /.container-fluid -->
 </nav>
+<!-- destroy_user_session_path -->

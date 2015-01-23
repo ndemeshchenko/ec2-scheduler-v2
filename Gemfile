@@ -42,7 +42,7 @@ gem 'spring',        group: :development
 # gem 'debugger', group: [:development, :test]
 
 
-
+gem 'net-ldap'
 gem 'devise'
 #gem 'mysql2'
 gem "mongoid", "~> 4.0.0"
