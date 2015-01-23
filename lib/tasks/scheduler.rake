@@ -14,8 +14,7 @@ namespace :scheduler do
 		day_of_week = now.wday
 		schedule_days = server.schedule_days.split(',')
 		schedule_hours = server.schedule_hours.split('-')
-		puts "#{schedule_days} #{day_of_week} #{schedule_hours}"
-		if schedule_days.include? schedule_days[day_of_week]
+		if schedule_days.include? schedule_days[day_of_week-1]
 			puts "#{now} #{server.hostname} should be running at that day"
 			return (now.hour >= schedule_hours[0].to_i and now.hour <= schedule_hours[1].to_i) ? true : false
 		end
