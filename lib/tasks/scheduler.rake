@@ -37,7 +37,6 @@ namespace :scheduler do
   			dry_run: false,
   			instance_ids: instance_ids,
 		)
-		binding.pry
 		resp.reservations.each do |reservation|
 			reservation.instances.each do |instance|
 				i = Server.where(instance_id: instance['instance_id']).first
