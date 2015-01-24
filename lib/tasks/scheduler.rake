@@ -94,6 +94,15 @@ namespace :scheduler do
 			server = Server.where(instance_id: server.instance_id).first
 			server.state = resp.first.stopping_instances[0].current_state.name
 			server.save
+
+			new_event = EventLog.new(
+				eventName: 'instance has been stopped', 
+				state: 'stopInstance',
+  				hostname: server.hostname,
+  				completed: true,
+  				date: Time.now.in_time_zone("Pacific Time (US & Canada)")
+  			)
+  			new_event.save
 		end
 	end
 
