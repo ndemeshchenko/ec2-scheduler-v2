@@ -14,7 +14,7 @@ namespace :scheduler do
 		day_of_week = now.wday
 		schedule_days = server.schedule_days.split(',')
 		schedule_hours = server.schedule_hours.split('-')
-		if schedule_days.include? schedule_days[day_of_week-1]
+		if schedule_days.include? now.strftime("%a")
 			return (now.hour >= schedule_hours[0].to_i and now.hour <= schedule_hours[1].to_i) ? true : false
 		end
 		return false
