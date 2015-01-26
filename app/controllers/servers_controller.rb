@@ -1,5 +1,5 @@
 class ServersController < ApplicationController
-  before_action :set_server, only: [:show, :edit, :update, :destroy]
+  before_action :set_server, only: [:show, :edit, :update, :destroy, :disable_scheduling, :enable_scheduling]
   before_action :load_events, only: [:index]
 
   before_action :authenticate_user!
@@ -16,7 +16,6 @@ class ServersController < ApplicationController
       format.html
       format.js# { render partial: "instance_info.html.erb", layout: false, object: @server }
     end
-    
   end
 
   def new
@@ -25,6 +24,18 @@ class ServersController < ApplicationController
   end
 
   def edit
+  end
+
+  def enable_scheduling
+    @server.locked = false
+    @server.save
+    redirect_to action: :index
+  end
+
+  def disable_scheduling
+    @server.locked = true
+    @server.save
+    redirect_to action: :index
   end
 
   def create

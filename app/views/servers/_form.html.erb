@@ -1,4 +1,4 @@
-<%= form_for(@server) do |f| %>
+<%= form_for @server, html: {class: "form-horizontal"} do |f| %>
   <% if @server.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@server.errors.count, "error") %> prohibited this server from being saved:</h2>
@@ -11,43 +11,76 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :instance_id %><br>
-    <%= f.text_field :instance_id %>
+  <div class="form-group">
+    <%= f.label :instance_id, class: "col-sm-3 control-label" %>
+    <div class="col-sm-9">
+      <%= f.text_field :instance_id, class: "form-control" %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :hostname %><br>
-    <%= f.text_field :hostname %>
+  <div class="form-group">
+    <%= f.label :hostname, class: "col-sm-3 control-label" %>
+    <div class="col-sm-9">
+      <%= f.text_field :hostname, class: "form-control" %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :url %><br>
-    <%= f.text_field :url %>
+  <div class="form-group">
+    <%= f.label :url, class: "col-sm-3 control-label" %>
+    <div class="col-sm-9">
+      <%= f.text_field :url, class: "form-control" %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :state %><br>
-    <%= f.text_field :state %>
+  <div class="form-group">
+    <%= f.label :state, class: "col-sm-3 control-label" %>
+    <div class="col-sm-9">
+      <%= f.text_field :state, class: "form-control" %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label 'Shedule uptime days' %><br>
-    <%= f.text_field :schedule_days %>
+  <div class="form-group">
+    <%= f.label 'Shedule uptime days', class: "col-sm-3 control-label" %>
+    <div class="col-sm-9">
+      <%= f.text_field :schedule_days, class: "form-control" %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label 'Schedule uptime hours' %><br>
-    <%= f.text_field :schedule_hours %>
+  <div class="form-group">
+    <%= f.label 'Schedule uptime hours', class: "col-sm-3 control-label" %>
+    <div class="col-sm-9">
+      <%= f.text_field :schedule_hours, class: "form-control" %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :notification_interval %><br>
-    <%= f.text_field :notification_interval %>
+  <div class="form-group">
+    <%= f.label :notification_interval, class: "col-sm-3 control-label" %>
+    <div class="col-sm-9">
+      <%= f.text_field :notification_interval, class: "form-control" %>
+    </div>
   </div>  
-  <div class="field">
-    <%= f.label :notification_list %><br>
-    <%= f.text_field :notification_list %>
+  <div class="form-group">
+    <%= f.label :notification_list, class: "col-sm-3 control-label" %>
+    <div class="col-sm-9">
+      <%= f.text_field :notification_list, class: "form-control" %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label "Disable scheduling" %><br>
-    <%= f.check_box :locked %>
-  </div>
+  <!-- <div class="form-group"> -->
+  
+  <!-- <span class="label label-info"><%#= @server.locked %></span> -->
+    <%#= f.label "Disable scheduling", class: "col-sm-3 control-label" %>
+    <!-- <div class="col-sm-9"> -->
+      <%#= f.check_box :locked %>
+    <!-- </div> -->
+  <!-- </div> -->
   <div class="actions">
-    <%= f.submit %>
+    <div class="row">
+      <div class="col-md-3">
+        <%= f.submit(class: 'btn btn-info') %>
+      </div>
+      <div class="col-md-3">
+        <% if @server.locked %>
+          <%= link_to "Enable scheduling", enable_scheduling_path(@server), class: 'btn btn-success' %>
+          <!-- <a href="//scheduling/enable" class="btn btn-success">Enable scheduling</a> -->
+        <% else %>
+          <%= link_to "Disable scheduling", disable_scheduling_path(@server), class: 'btn btn-danger' %>
+        <% end %>
+      </div>
+    </div>
+    
   </div>
 <% end %>

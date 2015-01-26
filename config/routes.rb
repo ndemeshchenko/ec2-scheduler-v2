@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   devise_for :users#, :controllers => {:sessions => 'sessions'}
   resources :servers
 
+  get '/servers/:id/scheduling/enable' => 'servers#enable_scheduling', as: :enable_scheduling
+  get '/servers/:id/scheduling/disable' => 'servers#disable_scheduling', as: :disable_scheduling
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
