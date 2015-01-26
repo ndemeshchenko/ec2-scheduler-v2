@@ -49,7 +49,7 @@ gem "mongoid", "~> 4.0.0"
 gem 'simple_form'
 gem 'whenever', :require => false
 gem 'aws-sdk-core'
-
+gem 'rufus-scheduler'
 
 group :development do
   gem 'better_errors'
