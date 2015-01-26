@@ -5,7 +5,7 @@ require 'json'
 
 scheduler = Rufus::Scheduler.singleton
 
-scheduler.every '10s' do
+scheduler.every '1m' do
 	main
 end
 
