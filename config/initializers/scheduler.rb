@@ -2,6 +2,8 @@ require 'rufus-scheduler'
 require 'pry'
 require 'aws-sdk-core'
 require 'json'
+require 'curb'
+require 'nokogiri'
 
 scheduler = Rufus::Scheduler.singleton
 
@@ -52,7 +54,7 @@ end
 def send_email(server, owner, time)
 	hibernation_notification_template = 
 		"The following servers are scheduled to go down for hibernation:<p>" + 
-		server.hostname + "@ #{time.hour}:#{time.min} " + 
+		server.hostname + "@ #{time.strftime("%H")}:#{time.strftime("%M")} " + 
 		"<p><p>To cancel any of these hibernation, go to <a href='http://snoopy.escm.co:3000/servers/#{server.id.to_s}/edit'>http://snoopy.escm.co/servers/#{server.id.to_s}/edit</a> " + 
 		# "<p><p>To wake up instances already hibernating, go to TBD<SOMETHING APPROPRIATE HERE> " + ""				
 		"<p><p>Thanks,<p>EngOps Bot"
@@ -79,6 +81,55 @@ def send_email(server, owner, time)
 	puts "message send to #{owner} :: #{ses_resp['message_id']} "
 end
 
+def set_nagios_downtime(server)
+	nagios_url = "http://nagios.elementums.com"
+	nagios_cmd_uri = "/cgi-bin/nagios3/cmd.cgi"
+	nagios_host = server.url
+	c = Curl::Easy.http_post("#{nagios_url}#{nagios_cmd_uri}",
+								Curl::PostField.content('cmd_typ', '55'),
+								Curl::PostField.content('cmd_mod', '2'),
+								Curl::PostField.content('host', nagios_host),
+								Curl::PostField.content('com_data', "downtime by EC2 Scheduler - #{server.hostname}"),
+								Curl::PostField.content('trigger', '0'),
+								Curl::PostField.content('start_time', Time.now.utc.strftime("%Y-%m-%d %H:%M:%S")),
+								Curl::PostField.content('end_time', (Time.now.utc + 8.hours).strftime("%Y-%m-%d %H:%M:%S")),
+								Curl::PostField.content('fixed', '1'),
+								Curl::PostField.content('hours', '8'),
+								Curl::PostField.content('minutes', '0'),
+								Curl::PostField.content('btnSubmit', 'Commit')
+							)
+	c.http_auth_types = :basic
+	c.username = 'ndemeshchenko'
+	c.password = 'rpiffwhz'
+	c.perform
+end
+
+def cancel_nagios_downtime(server)
+	nagios_url="http://nagios.elementums.com/cgi-bin/nagios3/extinfo.cgi?type=6"
+	nagios_host = server.url
+	c = Curl::Easy.new(nagios_url)
+	c.http_auth_types = :basic
+	c.username = 'ndemeshchenko'
+	c.password = 'rpiffwhz'
+	c.perform
+	html_doc = Nokogiri::HTML(c.body)
+	html_doc.css("a[href*='extinfo.cgi?type=1&host=']").each do |element|
+		if element.text == server.url
+			puts "CANCEL NAGIOS DOWNTIME for #{server.url}"
+			cancel_link = element.parent.parent.css("a[href*='cmd.cgi']").first.attributes['href'].value
+			c_nagios = Curl::Easy.http_post("http://nagios.elementums.com/cgi-bin/nagios3/cmd.cgi",
+										Curl::PostField.content('cmd_typ', '78'),
+										Curl::PostField.content('cmd_mod', '2'),
+										Curl::PostField.content('down_id', cancel_link.split('=').last),
+										Curl::PostField.content('btnSubmit', 'Commit'))
+			c_nagios.http_auth_types = :basic
+			c_nagios.username = 'ndemeshchenko'
+			c_nagios.password = 'rpiffwhz'
+			c_nagios.perform	
+		end
+	end
+end
+
 def stop_instance(server)
 	unless Server.where(instance_id: server.instance_id).first.locked
 		puts "going to stop instance. NO KIDDING HERE"
@@ -88,6 +139,7 @@ def stop_instance(server)
 		event.completed = true
 		event.save
 
+		set_nagios_downtime(server)
 		resp = @ec2.stop_instances(
 			dry_run: false,
 			instance_ids: [server.instance_id]
@@ -143,6 +195,7 @@ def main
 			if server.state != "running" and server.state != "pending"
 				puts server.state
 				if server.start_instance
+					cancel_nagios_downtime(server)
 					i_start_event = EventLog.new(
 						eventName: "starting instance", 
 						state: 'start_instance',
@@ -162,3 +215,5 @@ def main
 		end
 	end
 end
+
+

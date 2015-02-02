@@ -50,6 +50,8 @@ gem 'simple_form'
 gem 'whenever', :require => false
 gem 'aws-sdk-core'
 gem 'rufus-scheduler'
+gem 'curb'
+gem 'nokogiri'
 
 group :development do
   gem 'better_errors'
