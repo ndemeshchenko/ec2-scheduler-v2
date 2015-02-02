@@ -73,12 +73,14 @@
         <%= f.submit(class: 'btn btn-info') %>
       </div>
       <div class="col-md-3">
+      <% if @server %>
         <% if @server.locked %>
           <%= link_to "Enable scheduling", enable_scheduling_path(@server), class: 'btn btn-success' %>
           <!-- <a href="//scheduling/enable" class="btn btn-success">Enable scheduling</a> -->
         <% else %>
           <%= link_to "Disable scheduling", disable_scheduling_path(@server), class: 'btn btn-danger' %>
         <% end %>
+      <% end %>
       </div>
     </div>
     
