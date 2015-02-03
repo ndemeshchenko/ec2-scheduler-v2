@@ -53,10 +53,10 @@ def update_instances_state(servers)
 end
 
 def send_email(servers)
-	hibernation_notification_template_servers = ""
+	hibernation_notification_template_servers = []
 	servers.each do |server|
 		time = Time.now + server.notification_interval.to_i.minutes
-		hibernation_notification_template_servers += "#{server.hostname} @ #{time.strftime("%H")}:#{time.strftime("%M")}<p><p>To cancel this hibernation, go to <a href='http://snoopy.escm.co:3000/servers/#{server.id.to_s}/edit'>http://snoopy.escm.co/servers/#{server.id.to_s}/edit</a>"
+		hibernation_notification_template_servers << "#{server.hostname} @ #{time.strftime("%H")}:#{time.strftime("%M")}<p><p>To cancel this hibernation, go to <a href='http://snoopy.escm.co:3000/servers/#{server.id.to_s}/edit'>http://snoopy.escm.co/servers/#{server.id.to_s}/edit</a>"
 	end
 	hibernation_notification_template = "The following servers are scheduled to go down for hibernation:<p>" + 
 										hibernation_notification_template_servers.join("<p>--<p>") +
@@ -65,7 +65,7 @@ def send_email(servers)
 	ses_resp = @ses.send_email(
 		source: "ec2-scheduler@elementum.com",
 		destination: {
-		to_addresses: server.notification_list.split,
+		to_addresses: servers.map { |server| server.notification_list.split }.flatten.uniq,
 		    # cc_addresses: ["techops@elementum.com"],
 		},
 		message: {
@@ -80,9 +80,9 @@ def send_email(servers)
 				},
 		    },
 		},
-		reply_to_addresses: server.notification_list.split
+		reply_to_addresses: ["techops@elementum.com"]
 	)
-	puts "message send to #{owner} :: #{ses_resp['message_id']} "
+	puts "message send to #{ses_resp['message_id']} "
 end
 
 def set_nagios_downtime(server)
