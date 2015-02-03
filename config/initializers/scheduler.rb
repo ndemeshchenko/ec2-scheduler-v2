@@ -52,16 +52,16 @@ def update_instances_state(servers)
 	end
 end
 
-def send_email(servers, time)
+def send_email(servers)
 	hibernation_notification_template_servers = ""
 	servers.each do |server|
+		time = Time.now + server.notification_interval.to_i.minutes
 		hibernation_notification_template_servers += "#{server.hostname} @ #{time.strftime("%H")}:#{time.strftime("%M")}<p><p>To cancel this hibernation, go to <a href='http://snoopy.escm.co:3000/servers/#{server.id.to_s}/edit'>http://snoopy.escm.co/servers/#{server.id.to_s}/edit</a>"
 	end
-	hibernation_notification_template = 
-		"The following servers are scheduled to go down for hibernation:<p>" + 
-		hibernation_notification_template_servers.join("<p>--<p>") +
-		# "<p><p>To wake up instances already hibernating, go to TBD<SOMETHING APPROPRIATE HERE> " + ""				
-		"<p><p>Thanks,<p>EngOps Bot"
+	hibernation_notification_template = "The following servers are scheduled to go down for hibernation:<p>" + 
+										hibernation_notification_template_servers.join("<p>--<p>") +
+										# "<p><p>To wake up instances already hibernating, go to TBD<SOMETHING APPROPRIATE HERE> " + ""				
+										"<p><p>Thanks,<p>EngOps Bot"
 	ses_resp = @ses.send_email(
 		source: "ec2-scheduler@elementum.com",
 		destination: {
@@ -219,7 +219,7 @@ def main
 		end
 	end
 	if @notification_queue.size > 0
-		send_email(@notification_queue, Time.now + server.notification_interval.to_i.minutes)
+		send_email(@notification_queue)
 	end
 end
 
