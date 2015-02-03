@@ -13,6 +13,7 @@ end
 
 @ec2 = Aws::EC2::Client.new(region:'us-east-1')
 @ses = Aws::SES::Client.new(region:'us-east-1')
+@notification_queue = []
 
 def in_uptime_range?(server)
 	now = Time.now
@@ -51,11 +52,14 @@ def update_instances_state(servers)
 	end
 end
 
-def send_email(server, owner, time)
+def send_email(servers, time)
+	hibernation_notification_template_servers = ""
+	servers.each do |server|
+		hibernation_notification_template_servers += "#{server.hostname} @ #{time.strftime("%H")}:#{time.strftime("%M")}<p><p>To cancel this hibernation, go to <a href='http://snoopy.escm.co:3000/servers/#{server.id.to_s}/edit'>http://snoopy.escm.co/servers/#{server.id.to_s}/edit</a>"
+	end
 	hibernation_notification_template = 
 		"The following servers are scheduled to go down for hibernation:<p>" + 
-		server.hostname + "@ #{time.strftime("%H")}:#{time.strftime("%M")} " + 
-		"<p><p>To cancel any of these hibernation, go to <a href='http://snoopy.escm.co:3000/servers/#{server.id.to_s}/edit'>http://snoopy.escm.co/servers/#{server.id.to_s}/edit</a> " + 
+		hibernation_notification_template_servers.join("<p>--<p>") +
 		# "<p><p>To wake up instances already hibernating, go to TBD<SOMETHING APPROPRIATE HERE> " + ""				
 		"<p><p>Thanks,<p>EngOps Bot"
 	ses_resp = @ses.send_email(
@@ -80,6 +84,8 @@ def send_email(server, owner, time)
 	)
 	puts "message send to #{owner} :: #{ses_resp['message_id']} "
 end
+
+def group_email
 
 def set_nagios_downtime(server)
 	nagios_url = "http://nagios.elementums.com"
@@ -169,8 +175,8 @@ def prepare_to_stop(server)
 			stop_instance server;
 		end
 	else
-		send_email(server, "server.owner", Time.now + server.notification_interval.to_i.minutes)
 		puts("instance "+ server.hostname + " scheduled to stop at: #{Time.now + server.notification_interval.to_i.minutes}");
+		@notification_queue << server
 		new_event = EventLog.new(
 			eventName: 'email sent to server owner', 
 			state: 'notification',
@@ -214,6 +220,10 @@ def main
 			end
 		end
 	end
+	if @notification_queue.size > 0
+		send_email(notification_group, Time.now + server.notification_interval.to_i.minutes)
+	end
+	
 end
 
 
