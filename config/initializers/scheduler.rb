@@ -85,8 +85,6 @@ def send_email(servers, time)
 	puts "message send to #{owner} :: #{ses_resp['message_id']} "
 end
 
-def group_email
-
 def set_nagios_downtime(server)
 	nagios_url = "http://nagios.elementums.com"
 	nagios_cmd_uri = "/cgi-bin/nagios3/cmd.cgi"
@@ -221,9 +219,8 @@ def main
 		end
 	end
 	if @notification_queue.size > 0
-		send_email(notification_group, Time.now + server.notification_interval.to_i.minutes)
+		send_email(@notification_queue, Time.now + server.notification_interval.to_i.minutes)
 	end
-	
 end
 
 
