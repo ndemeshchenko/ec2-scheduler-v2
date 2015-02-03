@@ -220,6 +220,7 @@ def main
 	end
 	if @notification_queue.size > 0
 		send_email(@notification_queue)
+		@notification_queue.clear
 	end
 end
 
