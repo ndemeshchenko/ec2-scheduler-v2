@@ -21,7 +21,8 @@ end
 	'ModifyNetworkInterfaceAttribute',
 	'StartInstances',
 	'ModifyDBInstance',
-	'DeregisterInstancesFromLoadBalancer'
+	'DeregisterInstancesFromLoadBalancer',
+	'CreateSnapshot'
 ]
 
 
@@ -41,7 +42,6 @@ def main
 		j_event = JSON.parse(event.message)
 		# if j_event['userIdentity']['userName'] != 'elementum'
 			if @event_types.include? j_event['eventName']
-				# binding.pry
 				unless CloudTrailLog.where(event_id: j_event['eventID']).size > 0
 					new_ct_event = CloudTrailLog.new(
 						event_id: j_event['eventID'],
