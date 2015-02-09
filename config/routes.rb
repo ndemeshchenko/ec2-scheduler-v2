@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   devise_for :users#, :controllers => {:sessions => 'sessions'}
   resources :servers
 
+  get '/aws/cloud-trails-events' => 'aws#index', as: :ct_events
+
   get '/servers/:id/scheduling/enable' => 'servers#enable_scheduling', as: :enable_scheduling
   get '/servers/:id/scheduling/disable' => 'servers#disable_scheduling', as: :disable_scheduling
 

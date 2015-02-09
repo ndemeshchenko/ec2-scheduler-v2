@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="row" id="server-listing">
+  <div class="col-md-3"></div>
+  <div class="cold-md-5">
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+<% @ct_events.each do |event| %>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingTwo">
+      <h4 class="panel-title">
+          <%= event.event_name %> <%= event.log_event.to_jso %> 
+      </h4>
+    </div>
+    <div >
+      <div class="panel-body">
+        <pre>
+      	<%= event.log_event %>
+      </pre>
+      </div>
+    </div>
+  </div>
+<% end %>  
+</div>
+</div>
+<div class="col-md-3"></div>
