@@ -40,6 +40,8 @@ def main
 	events_resp.events.each do |event|
 		j_event = JSON.parse(event.message)
 		# if j_event['userIdentity']['userName'] != 'elementum'
+#binding.pry if j_event['eventName'] == 'StopInstances'
+
 			if event_types.include? j_event['eventName']
 				unless CloudTrailLog.where(event_id: j_event['eventID']).size > 0
 					new_ct_event = CloudTrailLog.new(
@@ -60,3 +62,4 @@ def main
 	puts list.uniq
 
 end
+main

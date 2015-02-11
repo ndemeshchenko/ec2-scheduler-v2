@@ -28,7 +28,7 @@ class AppConfigsController < ApplicationController
 
   def update
     @app_config.update(app_config_params)
-    respond_with(@app_config)
+    redirect_to action: 'index'
   end
 
   def destroy
