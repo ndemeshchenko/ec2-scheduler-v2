@@ -9,23 +9,23 @@ scheduler.every '2m' do
 	main
 end
 
-@event_types = [
-	'StopInstances', 
-	'RunInstances', 
-	'RebootInstances', 
-	'CreateSecurityGroup', 
-	'AuthorizeSecurityGroupIngress',
-	'AuthorizeSecurityGroupEgress',
-	'DeleteSecurityGroup',
-	'ModifyNetworkInterfaceAttribute',
-	'StartInstances',
-	'ModifyDBInstance',
-	'DeregisterInstancesFromLoadBalancer',
-	'CreateSnapshot'
-]
-
-
 def main
+	event_types = AppConfig.first.events.split(',')
+	# event_types = [
+	# 	'StopInstances', 
+	# 	'RunInstances', 
+	# 	'RebootInstances', 
+	# 	'CreateSecurityGroup', 
+	# 	'AuthorizeSecurityGroupIngress',
+	# 	'AuthorizeSecurityGroupEgress',
+	# 	'DeleteSecurityGroup',
+	# 	'ModifyNetworkInterfaceAttribute',
+	# 	'StartInstances',
+	# 	'ModifyDBInstance',
+	# 	'DeregisterInstancesFromLoadBalancer',
+	# 	'CreateSnapshot'
+	# ]	
+
 	puts 'Trigger AwsEventScanner::Main'
 	logs = logs = Aws::CloudWatchLogs::Client.new(region: 'us-east-1')
 	events_resp = logs.get_log_events(
@@ -40,14 +40,15 @@ def main
 	events_resp.events.each do |event|
 		j_event = JSON.parse(event.message)
 		# if j_event['userIdentity']['userName'] != 'elementum'
-			if @event_types.include? j_event['eventName']
+			if event_types.include? j_event['eventName']
 				unless CloudTrailLog.where(event_id: j_event['eventID']).size > 0
 					new_ct_event = CloudTrailLog.new(
 						event_id: j_event['eventID'],
 						log_event: j_event,
-						event_name: j_event['eventName']
+						event_name: j_event['eventName'],
+						event_time: j_event['eventTime']
 					)
-					new_ct_event.save!
+					new_ct_event.save
 				end
 				puts "#{j_event['eventTime']} #{j_event['userIdentity']['userName']} #{j_event['eventName']}"
 			end
@@ -59,9 +60,3 @@ def main
 	puts list.uniq
 
 end
-
-main
-# Time.at(events_resp.events.first.ingestion_time.to_s.split('')[0..9].join.to_i).to_datetime
-
-
-# StopInstances

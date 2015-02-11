@@ -5,5 +5,6 @@ class CloudTrailLog
   field :event_id, type: String
   field :log_event, type: Hash
   field :event_name, type: String
+  field :event_time, type: DateTime
 
 end

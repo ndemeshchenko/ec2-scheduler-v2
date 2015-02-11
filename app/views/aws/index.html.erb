@@ -1,29 +1,31 @@
 <div class="container">
   <div class="row" id="server-listing">
-  <div class="cold-md-8">
-<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-<% @ct_events.each do |event| %>
- <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="<%= event.id %>">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapse<%= event.id %>" aria-expanded="true" aria-controls="collapseOne">
-          <%= event.event_name %> - by <%= event.log_event['userIdentity']['userName'] %>
-        </a>
-      </h4>
-    </div>
-    <div id="collapse<%= event.id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="<%= event.id %>">
-      <div class="panel-body">
-        <code>
-      			<pre>
-        			<%= JSON.pretty_generate event.log_event %>
-        		</pre>
-        	</code>
+    <div class="col-md-10">
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <% @ct_events.each do |event| %>
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="<%= event.id %>">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse<%= event.id %>" aria-expanded="true" aria-controls="collapseOne">
+                <%= event.event_name %> - by <%= event.log_event['userIdentity']['userName'] %> @ <%= event.event_time %>
+                </a>
+              </h4>
+            </div>
+            <div id="collapse<%= event.id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="<%= event.id %>">
+              <div class="panel-body">
+                <code>
+              			<pre>
+                			<%= JSON.pretty_generate event.log_event %>
+                		</pre>
+        	      </code>
+              </div>
+            </div>
+          </div>
+        <% end %>  
       </div>
     </div>
-  </div>
-<% end %>  
-</div>
-  </div>
+    <div class="cold-md-2"></div>
+  </div>  
 </div>  
 
 
