@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :servers
 
   get '/aws/cloud-trails-events' => 'aws#index', as: :ct_events
+  get '/aws/api-aws-events' => 'aws#events', as: :api_aws_events
 
   get '/servers/:id/scheduling/enable' => 'servers#enable_scheduling', as: :enable_scheduling
   get '/servers/:id/scheduling/disable' => 'servers#disable_scheduling', as: :disable_scheduling

@@ -6,4 +6,9 @@ class AwsController < ApplicationController
   	@ct_events = CloudTrailLog.all.desc('event_time')
   end
 
+  def events
+  	@ct_events = CloudTrailLog.all.desc('event_time')
+  	render :json => @ct_events
+  end
+
 end

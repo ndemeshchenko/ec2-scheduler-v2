@@ -11,3 +11,28 @@ $(document).ready(function(){
 });
 
 
+var awsEventsApp = angular.module('awsEventsApp', ['ui.bootstrap']);
+
+awsEventsApp.controller('AwsEventListCtrl', function ($scope, $http, $interval) {
+	$scope.oneAtATime = true;
+
+	$scope.status = {
+    	isFirstOpen: true,
+    	isFirstDisabled: false
+  	};
+
+  	$scope.items = ['Item 1', 'Item 2', 'Item 3'];
+
+	$http.get('/aws/api-aws-events', { headers: {'Content-Type': 'application/javascript'}})
+	.success(function (data) {
+		$scope.events = data;
+	})
+
+	$interval(function (argument) {
+		$http.get('/aws/api-aws-events', { headers: {'Content-Type': 'application/javascript'}})
+		.success(function (data) {
+			$scope.events = data;
+		})
+	}, 1000*60);
+})
+
